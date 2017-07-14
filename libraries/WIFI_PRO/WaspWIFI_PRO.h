@@ -69,6 +69,8 @@ enum authentication_modes
 	WEP128 = 2,			// WEP 128
 	WPA = 3,			// WPA-PSK with TKIP encryption
 	WPA2 = 4,			// WPA2-PSK with TKIP or AES encryption
+	WPAEAP = 5,			// WPA-TKIP Enterprise with EAP-TLS or PEAP-MSCHAPv2
+	WPA2EAP = 6,			// WPA2-AES Enterprise with EAP-TLS or PEAP-MSCHAPv2
 };
 
 
