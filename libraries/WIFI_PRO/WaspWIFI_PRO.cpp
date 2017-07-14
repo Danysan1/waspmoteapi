@@ -1399,21 +1399,21 @@ uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass, c
 					strcpy_P( cmd_name, (char*)pgm_read_word(&(table_WiReach[66]))); 	
 					// generate "AT+iEUSN=<user>\r"
 					GEN_ATCOMMAND1(gen_cmd_name, user);						
+					// Wait for 20secs
+					status = sendCommand( _command, I_OK, 20000 );
+					
+					if (status != 1)
+					{
+						// timeout
+						_errorCode = ERROR_CODE_0000;
+						return 1;
+					}
+
 					break;	
 		default:
 				return 1;		
 	}
 
-
-	// Wait for 20secs
-	status = sendCommand( _command, I_OK, 20000 );
-	
-	if (status != 1)
-	{
-		// timeout
-		_errorCode = ERROR_CODE_0000;
-		return 1;
-	}
 
 	/// 3. Set password key
 	switch( securityMode )
