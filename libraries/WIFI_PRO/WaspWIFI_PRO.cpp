@@ -1317,7 +1317,6 @@ uint8_t WaspWIFI_PRO::setPassword( uint8_t securityMode, char* pass)
 }
 
 
-
 /*!
  * @param 	uint8_t n: index of profile (from 0 to 9)
  * @param 	uint8_t securityMode: type of encryption
@@ -1330,6 +1329,25 @@ uint8_t WaspWIFI_PRO::setPassword( uint8_t securityMode, char* pass)
  * @return	'0' if ok, '1' if error
  */
 uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass)
+{
+	return setPassword(n, securityMode, pass, NULL);
+}
+
+/*!
+ * @param 	uint8_t n: index of profile (from 0 to 9)
+ * @param 	uint8_t securityMode: type of encryption
+ * 		@arg	OPEN
+ * 		@arg	WEP64
+ * 		@arg	WEP128
+ * 		@arg	WPA
+ * 		@arg	WPA2
+ * 		@arg	WPAEAP
+ * 		@arg	WPA2EAP
+ * @param 	char* pass: string for the password
+ * @param 	char* user: string for the domain and username
+ * @return	'0' if ok, '1' if error
+ */
+uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass, char* user)
 {
 	uint8_t status;
 	char cmd_name[20];
@@ -1365,7 +1383,39 @@ uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass)
 	}
 
 
-	/// 2. Set password key
+	/// 2. Set username (EAP authentication only)
+	switch( securityMode )
+	{
+		case OPEN:
+		case WEP64:				
+		case WEP128:				
+		case WPA:				
+		case WPA2:					
+					// No extra settings needed
+					break;
+		case WPAEAP:				
+		case WPA2EAP:					
+					// "EUSN"
+					strcpy_P( cmd_name, (char*)pgm_read_word(&(table_WiReach[67]))); 	
+					// generate "AT+iEUSN=<user>\r"
+					GEN_ATCOMMAND1(cmd_name, user);						
+					// Wait for 20secs
+					status = sendCommand( _command, I_OK, 20000 );
+					
+					if (status != 1)
+					{
+						// timeout
+						_errorCode = ERROR_CODE_0000;
+						return 1;
+					}
+
+					break;	
+		default:
+				return 1;		
+	}
+
+
+	/// 3. Set password key
 	switch( securityMode )
 	{
 		case OPEN:
@@ -1391,6 +1441,13 @@ uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass)
 					// generate "AT+iWPPn=<pass>\r"
 					GEN_ATCOMMAND1(gen_cmd_name, pass);
 					break;
+		case WPAEAP:				
+		case WPA2EAP:					
+					// "EPSW"
+					strcpy_P( cmd_name, (char*)pgm_read_word(&(table_WiReach[68]))); 	
+					// generate "AT+iEPSW=<pass>\r"
+					GEN_ATCOMMAND1(cmd_name, pass);						
+					break;	
 		default:
 				return 1;
 	}

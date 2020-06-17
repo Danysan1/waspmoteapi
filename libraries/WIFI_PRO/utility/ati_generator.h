@@ -136,6 +136,8 @@ const char str_wireach_63[] PROGMEM	= "---"; 			// 63
 const char str_wireach_64[] PROGMEM	= "RP1"; 			// 64
 const char str_wireach_65[] PROGMEM	= "SSL"; 			// 65
 const char str_wireach_66[] PROGMEM	= "MACA"; 			// 66
+const char str_wireach_67[] PROGMEM	= "EUSN"; 			// 67
+const char str_wireach_68[] PROGMEM	= "EPSW"; 			// 68
 
 
 const char* const table_WiReach[] PROGMEM=
@@ -206,7 +208,9 @@ const char* const table_WiReach[] PROGMEM=
 	str_wireach_63,
 	str_wireach_64,
 	str_wireach_65,
-  str_wireach_66,
+	str_wireach_66,
+	str_wireach_67,
+	str_wireach_68,
 };
 
 
