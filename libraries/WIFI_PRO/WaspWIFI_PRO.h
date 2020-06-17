@@ -186,6 +186,7 @@ public:
 	uint8_t setPassword(uint8_t securityMode);
 	uint8_t setPassword(uint8_t securityMode, char* pass);
 	uint8_t setPassword(uint8_t n, uint8_t securityMode, char* pass);
+	uint8_t setPassword(uint8_t n, uint8_t securityMode, char* pass, char* user);
 	uint8_t setWorkingMode(uint8_t n);
 	uint8_t setServerPoolSize(uint8_t range);
 	uint8_t softReset();
