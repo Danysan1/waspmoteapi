@@ -69,6 +69,8 @@ enum authentication_modes
 	WEP128 = 2,			// WEP 128
 	WPA = 3,			// WPA-PSK with TKIP encryption
 	WPA2 = 4,			// WPA2-PSK with TKIP or AES encryption
+	WPAEAP = 5,			// WPA-TKIP Enterprise with EAP-TLS or PEAP-MSCHAPv2
+	WPA2EAP = 6,			// WPA2-AES Enterprise with EAP-TLS or PEAP-MSCHAPv2
 };
 
 
@@ -184,6 +186,7 @@ public:
 	uint8_t setPassword(uint8_t securityMode);
 	uint8_t setPassword(uint8_t securityMode, char* pass);
 	uint8_t setPassword(uint8_t n, uint8_t securityMode, char* pass);
+	uint8_t setPassword(uint8_t n, uint8_t securityMode, char* pass, char* user);
 	uint8_t setWorkingMode(uint8_t n);
 	uint8_t setServerPoolSize(uint8_t range);
 	uint8_t softReset();
