@@ -1317,21 +1317,6 @@ uint8_t WaspWIFI_PRO::setPassword( uint8_t securityMode, char* pass)
 }
 
 
-/*!
- * @param 	uint8_t n: index of profile (from 0 to 9)
- * @param 	uint8_t securityMode: type of encryption
- * 		@arg	OPEN
- * 		@arg	WEP64
- * 		@arg	WEP128
- * 		@arg	WPA
- * 		@arg	WPA2
- * @param 	char* pass: string for the password
- * @return	'0' if ok, '1' if error
- */
-uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass)
-{
-	return setPassword(n, securityMode, pass, NULL);
-}
 
 /*!
  * @param 	uint8_t n: index of profile (from 0 to 9)
@@ -1343,11 +1328,13 @@ uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass)
  * 		@arg	WPA2
  * 		@arg	WPAEAP
  * 		@arg	WPA2EAP
+ * 		@arg	WPAEAP_NO_CA
+ * 		@arg	WPA2EAP_NO_CA
  * @param 	char* pass: string for the password
  * @param 	char* user: string for the domain and username
  * @return	'0' if ok, '1' if error
  */
-uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass, char* user)
+uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass, char* user = NULL)
 {
 	uint8_t status;
 	char cmd_name[20];
@@ -1395,6 +1382,8 @@ uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass, c
 					break;
 		case WPAEAP:				
 		case WPA2EAP:					
+		case WPAEAP_NO_CA:
+		case WPA2EAP_NO_CA:
 					// "EUSN"
 					strcpy_P( cmd_name, (char*)pgm_read_word(&(table_WiReach[67]))); 	
 					// generate "AT+iEUSN=<user>\r"
@@ -1443,6 +1432,8 @@ uint8_t WaspWIFI_PRO::setPassword(uint8_t n, uint8_t securityMode, char* pass, c
 					break;
 		case WPAEAP:				
 		case WPA2EAP:					
+		case WPAEAP_NO_CA:
+		case WPA2EAP_NO_CA:
 					// "EPSW"
 					strcpy_P( cmd_name, (char*)pgm_read_word(&(table_WiReach[68]))); 	
 					// generate "AT+iEPSW=<pass>\r"

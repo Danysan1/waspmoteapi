@@ -70,7 +70,9 @@ enum authentication_modes
 	WPA = 3,			// WPA-PSK with TKIP encryption
 	WPA2 = 4,			// WPA2-PSK with TKIP or AES encryption
 	WPAEAP = 5,			// WPA-TKIP Enterprise with EAP-TLS or PEAP-MSCHAPv2
-	WPA2EAP = 6,			// WPA2-AES Enterprise with EAP-TLS or PEAP-MSCHAPv2
+	WPA2EAP = 6,		// WPA2-AES Enterprise with EAP-TLS or PEAP-MSCHAPv2
+	WPAEAP_NO_CA = 105,	// WPA-TKIP Enterprise with EAP-TLS or PEAP-MSCHAPv2. RADIUS Certification Verification will be skipped
+	WPA2EAP_NO_CA = 106,// WPA2-AES Enterprise with EAP-TLS or PEAP-MSCHAPv2. RADIUS Certification Verification will be skipped
 };
 
 
