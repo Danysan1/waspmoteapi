@@ -6211,6 +6211,208 @@ uint8_t WaspWIFI_PRO::setCA(char* ca)
 	}
 }
 
+/*!
+ * @brief	Sets the certificates of the trusted certificate authorities. iChip
+ * 			accepts a server’s identity only if its certificate is signed by one
+ * 			of these authorities
+ *
+ * @param	char* ca: it is referenced as the trusted certificate authority’s
+ * 			certificate during SSL3/TLS1 socket connection establishment
+ * 			(handshake). iChip establishes an SSL3/TLS1 socket connection only
+ * 			to servers having a certificate authenticated by this certificate
+ * 			authority. iChip expects cert to be multiple lines separated by
+ * 			<CR>, beginning with:-----BEGIN CERTIFICATE----- and terminating
+ * 			with: -----END CERTIFICATE-----. cert should include an RSA
+ * 			encryption public key of 1024 or 2048 bit. The signature algorithm
+ * 			may be MD2, MD5 or SHA1. Maximum size of cert is 1500 characters.
+ *
+ * @return	'0' if ok; 'x' see errors
+ *
+ */
+uint8_t WaspWIFI_PRO::setCert(char* cert)
+{
+	char cmd_name[20];
+	uint8_t status;
+	uint8_t error;
+
+	/// Change Baudrate to 9600 bps:
+	error = changeBaudRate(9600);
+
+	if (error != 0)
+	{
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("error changing baudrate\n"));
+		#endif
+		return 1;
+	}
+
+	// "CERT"
+	strcpy_P( cmd_name, (char*)pgm_read_word(&(table_WiReach[69])));
+
+	serialFlush(_uart);
+
+	// print "AT+iCERT=<cert>\r"
+	printString("AT+iCERT=", _uart);
+	printString(cert, _uart);
+
+	/*
+	 * Wait for different lines until a good o bad answer is received
+	 */
+	status = 3;
+
+	while (status == 3)
+	{
+		status = waitFor(I_OK, AT_ERROR, EOL_CR_LF,100);
+	}
+
+	#if DEBUG_WIFI_PRO > 0
+	switch (status)
+		{
+			case 0: PRINT_WIFI_PRO(F("status 0\n")); break;
+			case 1: PRINT_WIFI_PRO(F("status 1\n")); break;
+			case 2: PRINT_WIFI_PRO(F("status 2\n")); break;
+			case 3: PRINT_WIFI_PRO(F("status 3\n")); break;
+			default:PRINT_WIFI_PRO(F("default\n")); break;
+		}
+	USB.println(_buffer, _length);
+	#endif
+
+
+	/// Change Baudrate to 115200 bps
+	error = changeBaudRate(115200);
+
+	if (error != 0)
+	{
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("error changing baudrate\n"));
+		#endif
+		return 1;
+	}
+
+	if (status == 1)
+	{
+		return 0;
+	}
+	else if (status == 2)
+	{
+		getErrorCode();
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("Error code found\n"));
+		#endif
+		return 1;
+	}
+	else
+	{
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("No answer\n"));
+		#endif
+		// timeout error
+		_errorCode = ERROR_CODE_0000;
+		return 1;
+	}
+}
+
+/*!
+ * @brief	Sets the certificates of the trusted certificate authorities. iChip
+ * 			accepts a server’s identity only if its certificate is signed by one
+ * 			of these authorities
+ *
+ * @param	char* ca: it is referenced as the trusted certificate authority’s
+ * 			certificate during SSL3/TLS1 socket connection establishment
+ * 			(handshake). iChip establishes an SSL3/TLS1 socket connection only
+ * 			to servers having a certificate authenticated by this certificate
+ * 			authority. iChip expects cert to be multiple lines separated by
+ * 			<CR>, beginning with:-----BEGIN CERTIFICATE----- and terminating
+ * 			with: -----END CERTIFICATE-----. cert should include an RSA
+ * 			encryption public key of 1024 or 2048 bit. The signature algorithm
+ * 			may be MD2, MD5 or SHA1. Maximum size of cert is 1500 characters.
+ *
+ * @return	'0' if ok; 'x' see errors
+ *
+ */
+uint8_t WaspWIFI_PRO::setPKey(char* pkey)
+{
+	char cmd_name[20];
+	uint8_t status;
+	uint8_t error;
+
+	/// Change Baudrate to 9600 bps:
+	error = changeBaudRate(9600);
+
+	if (error != 0)
+	{
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("error changing baudrate\n"));
+		#endif
+		return 1;
+	}
+
+	// "PKEY"
+	strcpy_P( cmd_name, (char*)pgm_read_word(&(table_WiReach[70])));
+
+	serialFlush(_uart);
+
+	// print "AT+iPKEY=<pkey>\r"
+	printString("AT+iPKEY=", _uart);
+	printString(pkey, _uart);
+
+	/*
+	 * Wait for different lines until a good o bad answer is received
+	 */
+	status = 3;
+
+	while (status == 3)
+	{
+		status = waitFor(I_OK, AT_ERROR, EOL_CR_LF,100);
+	}
+
+	#if DEBUG_WIFI_PRO > 0
+	switch (status)
+		{
+			case 0: PRINT_WIFI_PRO(F("status 0\n")); break;
+			case 1: PRINT_WIFI_PRO(F("status 1\n")); break;
+			case 2: PRINT_WIFI_PRO(F("status 2\n")); break;
+			case 3: PRINT_WIFI_PRO(F("status 3\n")); break;
+			default:PRINT_WIFI_PRO(F("default\n")); break;
+		}
+	USB.println(_buffer, _length);
+	#endif
+
+
+	/// Change Baudrate to 115200 bps
+	error = changeBaudRate(115200);
+
+	if (error != 0)
+	{
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("error changing baudrate\n"));
+		#endif
+		return 1;
+	}
+
+	if (status == 1)
+	{
+		return 0;
+	}
+	else if (status == 2)
+	{
+		getErrorCode();
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("Error code found\n"));
+		#endif
+		return 1;
+	}
+	else
+	{
+		#if DEBUG_WIFI_PRO > 0
+			PRINT_WIFI_PRO(F("No answer\n"));
+		#endif
+		// timeout error
+		_errorCode = ERROR_CODE_0000;
+		return 1;
+	}
+}
+
 
 
 /* requestOTA() - It downloads a new OTA file if OTA is necessary

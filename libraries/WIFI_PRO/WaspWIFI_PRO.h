@@ -320,6 +320,8 @@ public:
 	// SSL/TLS
 	uint8_t setCA(char* ca);
 	uint8_t sslHandshake(	uint8_t handle );
+	uint8_t setCert(char* cert);
+	uint8_t setPKey(char* pkey);
 
 	// Firmware
 	uint8_t getFirmwareVersion();
